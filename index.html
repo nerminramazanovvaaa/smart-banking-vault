@@ -160,7 +160,7 @@
                 </div>
                 <div class="form-group">
                     <label>Soyad</label>
-                    <input type="text" id="regSurname" placeholder="Məmmədova">
+                    <input type="text" id="regSurname" placeholder="Ramazanova">
                 </div>
             </div>
             <div class="form-group">
@@ -173,7 +173,7 @@
             </div>
 
             <hr style="border-color: var(--border); margin: 20px 0;">
-            <h3 style="font-size: 15px;">💳 İlk Bank Kartınızı Əlavə Edin</h3>
+            <h3 style="font-size: 15px;"> Bank Kartınızı Əlavə Edin</h3>
             <div class="form-group">
                 <label>Bank və ya Kart Adı</label>
                 <input type="text" id="regCardName" placeholder="Kapital Bank / Birbank">
@@ -223,7 +223,7 @@
         <h2>Təhlükəsizlik Kodunun Təsdiqi</h2>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">E-mail ünvanınıza göndərilən 4 rəqəmli kodu daxil edin.</p>
         <div style="background: #020617; padding: 12px; border-radius: 10px; margin-bottom: 15px; text-align: center; color: var(--accent); font-family: monospace; font-size: 16px;">
-            Gələn Kod: <b>1234</b>
+            Gələn simulyasiya Kodu: <b>1234</b>
         </div>
         <form onsubmit="event.preventDefault(); verifyOtp();">
             <div class="form-group">
@@ -239,7 +239,7 @@
         <div class="top-bar">
             <div>
                 <h2 id="welcomeUser" style="margin: 0;">Xoş gəldiniz</h2>
-                <span class="security-badge">🔒 Qorunan İki-Mərhələli Bank Şəbəkəsi</span>
+                <span class="security-badge">🔒 Güvənli Bank Şəbəkəsi</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()">Çıxış</button>
         </div>
@@ -270,8 +270,8 @@
             <!-- Sol Tərəf: Kartlarım & Yeni Kart Formu -->
             <div>
                 <div class="card">
-                    <h3>💼 Bank Kartlarınız</h3>
-                    <p style="font-size: 12px; color: var(--muted); margin-top: -10px;">Bakiyeyi görmek için kartın üzerine klikləyin:</p>
+                    <h3> Bank Kartlarınız</h3>
+                    <p style="font-size: 12px; color: var(--muted); margin-top: -10px;">Bakiyəyi görmək üçün kartın üzerine klikləyin:</p>
                     <div id="cardsContainer"></div>
                     <button onclick="selectCard(null)" style="background: transparent; border: 1px dashed #334155; color: var(--muted); width: 100%; padding: 10px; border-radius: 10px; cursor: pointer; margin-top: 5px;">Bütün Kartlara Bax (Ümumi)</button>
                 </div>
@@ -306,18 +306,18 @@
                 </div>
 
                 <div class="card">
-                    <h3>🔄 Bank Tranzaksiya Avtomatlaşdırılması</h3>
+                    <h3> Bank Tranzaksiya Avtomatlaşdırılması</h3>
                     <p style="font-size: 13px; color: var(--muted);">Kart üzrə ödəniş və ya pul köçürməsi simulyasiyası:</p>
-                    <button class="btn webhook-btn" onclick="simulateTransaction('expense', 'Market (Bravo)', 35.00)">🛍️ Bravo Market (-35 ₼)</button>
-                    <button class="btn webhook-btn" onclick="simulateTransaction('expense', 'Bolt Taxi', 8.50)" style="background: #6366f1;">🚗 Taksi Ödənişi (-8.50 ₼)</button>
-                    <button class="btn webhook-btn" onclick="simulateTransaction('income', 'Maaş / Köçürmə', 500.00)" style="background: #0ea5e9;">💰 Hesaba Pul Köçürməsi (+500 ₼)</button>
+                    <button class="btn webhook-btn" onclick="simulateTransaction('expense', 'Market (Bravo)', 35.00)"> Bravo Market (-35 ₼)</button>
+                    <button class="btn webhook-btn" onclick="simulateTransaction('expense', 'Bolt Taxi', 8.50)" style="background: #6366f1;"> Taksi Ödənişi (-8.50 ₼)</button>
+                    <button class="btn webhook-btn" onclick="simulateTransaction('income', 'Maaş / Köçürmə', 500.00)" style="background: #0ea5e9;"> Hesaba Pul Köçürməsi (+500 ₼)</button>
                 </div>
             </div>
 
             <!-- Sağ Tərəf: Tranzaksiyalar Tarixçəsi -->
             <div>
                 <div class="card">
-                    <h3>📜 Əməliyyat Tarixçəsi</h3>
+                    <h3> Əməliyyat Tarixçəsi</h3>
                     <div id="txContainer">
                         <p style="color: var(--muted);">Hələ heç bir əməliyyat qeydə alınmayıb.</p>
                     </div>
@@ -587,7 +587,7 @@
             statBal = selectedCard.balance;
             filteredTx = appState.transactions.filter(t => t.cardId === appState.activeCardId);
         } else {
-            document.getElementById('selectedCardTitle').innerText = `💳 Bütün Kartlar üzrə Ümumi Balans`;
+            document.getElementById('selectedCardTitle').innerText = ` Bütün Kartlar üzrə Ümumi Balans`;
         }
 
         filteredTx.forEach(t => {
