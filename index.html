@@ -394,7 +394,7 @@
         document.getElementById('registerCard').classList.remove('hidden');
     }
 
-    function handleRegister() {
+    async function handleRegister() {
         const name = document.getElementById('regName').value.trim();
         const surname = document.getElementById('regSurname').value.trim();
         const email = document.getElementById('regEmail').value.trim();
@@ -416,32 +416,76 @@
             return;
         }
 
-        appState.registeredUser = { name, surname, email, pass };
-        
-        appState.cards.push({
-            id: Date.now(),
-            name: cardName,
-            number: cardNumber,
-            exp: cardExp,
-            balance: 0.00
-        });
+        // --- İNDİ BURADA SERVERƏ (BACKEND) SORĞU GÖNDƏRİRİK ---
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name: `${name} ${surname}`, 
+                    email,
+                    password: pass, // <-- Şifrəni buraya əlavə edirsən
+                    cardNumber: cleanCard 
+                })
+            });
 
-        showToast("Qeydiyyat uğurla tamamlandı! Giriş edin.");
-        showLogin();
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast("Qeydiyyat uğurla tamamlandı! Kart şifrələndi.");
+                appState.registeredUser = { name, surname, email, pass };
+                
+                appState.cards.push({
+                    id: Date.now(),
+                    name: cardName,
+                    number: cardNumber,
+                    exp: cardExp,
+                    balance: 0.00
+                });
+
+                showLogin();
+            } else {
+                showToast("Xəta baş verdi!", "error");
+            }
+        } catch (err) {
+            showToast("Serverlə əlaqə qurulmadı!", "error");
+        }
     }
-
-    function handleLogin() {
+    async function handleLogin() {
         const email = document.getElementById('loginEmail').value.trim();
         const pass = document.getElementById('loginPass').value;
 
-        if (!appState.registeredUser || appState.registeredUser.email !== email || appState.registeredUser.pass !== pass) {
-            showToast("E-mail və ya şifrə yanlışdır!", "error");
+        if (!email || !pass) {
+            showToast("Zəhmət olmasa e-mail və şifrəni daxil edin!", "error");
             return;
         }
 
-        document.getElementById('loginCard').classList.add('hidden');
-        document.getElementById('otpCard').classList.remove('hidden');
-        showToast("Təhlükəsizlik kodu e-mail ünvanınıza göndərildi.");
+        try {
+            // Nisbi (relative) URL istifadə edirik ki, server eyni port üzərindən sorğunu əldə etsin
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                appState.registeredUser = { 
+                    name: data.user.name, 
+                    email: data.user.email, 
+                    pass: pass 
+                };
+
+                document.getElementById('loginCard').classList.add('hidden');
+                document.getElementById('otpCard').classList.remove('hidden');
+                showToast("Təhlükəsizlik kodu e-mail ünvanınıza göndərildi.");
+            } else {
+                showToast(data.message || "E-mail və ya şifrə yanlışdır!", "error");
+            }
+        } catch (err) {
+            showToast("Serverlə əlaqə qurulmadı!", "error");
+        }
     }
 
     function verifyOtp() {
@@ -583,7 +627,7 @@
 
         if (appState.activeCardId !== null) {
             const selectedCard = appState.cards.find(c => c.id === appState.activeCardId);
-            document.getElementById('selectedCardTitle').innerText = `💳 Seçilmiş Kart: ${selectedCard.name}`;
+            document.getElementById('selectedCardTitle').innerText = ` Seçilmiş Kart: ${selectedCard.name}`;
             statBal = selectedCard.balance;
             filteredTx = appState.transactions.filter(t => t.cardId === appState.activeCardId);
         } else {
